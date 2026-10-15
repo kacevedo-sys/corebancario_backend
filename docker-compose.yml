@@ -1,0 +1,18 @@
+services:
+  backend:
+    build: .
+    image: corebancario-backend:0.1
+    container_name: corebancario-backend
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    # Permite que el contenedor llegue a servicios publicados en el host
+    # (por ejemplo Oracle en el 1521 o Keycloak en el 8080)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      # Micronaut convierte estas variables en datasources.default.* y demas
+      DATASOURCES_DEFAULT_URL: ${DB_URL}
+      DATASOURCES_DEFAULT_USERNAME: ${DB_USER}
+      DATASOURCES_DEFAULT_PASSWORD: ${DB_PASSWORD}
+      MICRONAUT_SECURITY_TOKEN_JWT_SIGNATURES_JWKS_KEYCLOAK_URL: ${KEYCLOAK_JWKS_URL}
