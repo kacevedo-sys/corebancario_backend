@@ -1,6 +1,6 @@
 datasources:
   default:
-    url: jdbc:oracle:thin:@//25.23.49.200:1521/FREEPDB1
+    url: jdbc:oracle:thin:@//host.docker.internal:1521/FREEPDB1
     driverClassName: oracle.jdbc.OracleDriver
     username: byte
     password: '1234'
