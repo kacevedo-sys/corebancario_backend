@@ -51,3 +51,15 @@
 - [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
 
 
+***
+## Archivos Modificados o Agragados
+**Archivos modificados:**
+- README.md
+- src\main\resources\application.yml, linea 2
+- src\main\resources\application.properties, linea 15
+
+**Archivos agregados**
+- Dockerfile
+- docker-compose.yml
+- dockerignore
+- env.example
