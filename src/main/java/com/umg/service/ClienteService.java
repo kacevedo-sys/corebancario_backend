@@ -6,6 +6,7 @@ import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 @Singleton
@@ -17,7 +18,7 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-    public Iterable<Cliente> listar() {
+    public List<Cliente> listar() {
         return clienteRepository.findAll();
     }
 
