@@ -3,6 +3,7 @@ package com.umg.controller;
 import com.umg.bo.Cliente;
 import com.umg.dto.PageResponse;
 import com.umg.service.ClienteService;
+import com.umg.service.ClienteService.CorreoDuplicadoException;
 import com.umg.utils.PaginationUtils;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
@@ -38,17 +39,28 @@ public class ClienteController {
 
     @Post
     @Status(io.micronaut.http.HttpStatus.CREATED)
-    public HttpResponse<Cliente> crear(@Valid @Body Cliente cliente) {
+    public HttpResponse<?> crear(@Valid @Body Cliente cliente) {
         int entero = (int) (Math.random() * 100) + 1;
 
         cliente.setClienteId(new BigInteger(String.valueOf(entero)));
-        return HttpResponse.status(io.micronaut.http.HttpStatus.CREATED)
-                .body(clienteService.crear(cliente));
+        try {
+            return HttpResponse.status(io.micronaut.http.HttpStatus.CREATED)
+                    .body(clienteService.crear(cliente));
+        } catch (CorreoDuplicadoException exception) {
+            return HttpResponse.status(io.micronaut.http.HttpStatus.CONFLICT)
+                    .body(new ErrorResponse(exception.getMessage()));
+        }
     }
 
     @Put("/{id}")
     public HttpResponse<?> actualizar(@PathVariable BigInteger id, @Valid @Body Cliente cliente) {
-        Optional<Cliente> actualizado = clienteService.actualizar(id, cliente);
+        Optional<Cliente> actualizado;
+        try {
+            actualizado = clienteService.actualizar(id, cliente);
+        } catch (CorreoDuplicadoException exception) {
+            return HttpResponse.status(io.micronaut.http.HttpStatus.CONFLICT)
+                    .body(new ErrorResponse(exception.getMessage()));
+        }
         if (actualizado.isPresent()) {
             return HttpResponse.ok(actualizado.get());
         }
